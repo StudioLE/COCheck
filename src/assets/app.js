@@ -1,7 +1,13 @@
 $(document).ready(function() {
 
+  // // // // // // // // // // // // // // // // // // // // // //
+  // Variables
+
   var brick = 215
   var joint = 10
+
+  // // // // // // // // // // // // // // // // // // // // // //
+  // Functions
 
   function CO(x) {
     return (brick + joint) * x;
@@ -123,6 +129,50 @@ $(document).ready(function() {
 
   }
 
+  function duplicate(param) {
+    $(".prototype").clone(true, true).insertBefore(".duplicate")
+    // @todo Rewrite with JS Promises
+    $(".card").slice(1).removeClass("prototype")
+  }
+
+  function init() {
+    // Get hash params from URL
+    var hash = window.location.hash.split("/").slice(1)
+
+    if(hash.length > 1) {
+      var i = 0;
+
+      // Create a card for each param
+      hash.forEach(function(param) {
+        i++
+        console.log(i)
+        console.log(param)
+        if(Number.isInteger(Number(param))) {
+          if(i > 1) {
+            duplicate(param)
+            // @todo Rewrite with JS Promises
+            check($(".card:nth-child(" + i + ")").find(".mm").val(param))
+          }
+        }
+        else {
+          console.log("Param isn't an integer: ", param)
+        }
+      })
+      
+      // Setup the first element
+      check($(".card.prototype").find(".mm").val(hash[0]))
+    }
+
+  }
+
+  // // // // // // // // // // // // // // // // // // // // // //
+  // Init
+
+  init()
+  
+  // // // // // // // // // // // // // // // // // // // // // //
+  // Events
+
   // When an input value is changed
   $("input").change(function(event) {
     check($(this))
@@ -153,7 +203,6 @@ $(document).ready(function() {
   // When duplicate icon is clicked
   $(".duplicate-icon").click(function(event) {
     event.preventDefault()
-    $(".prototype").clone(true, true).insertBefore(".duplicate");
-    $(".cell").slice(1).removeClass("prototype")
+    duplicate()
   });
 });
