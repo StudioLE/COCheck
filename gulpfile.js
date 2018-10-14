@@ -79,9 +79,9 @@ gulp.task('assets', function() {
 // Build app CSS
 gulp.task('css', function() {
   gulp.src('src/assets/app.less')
-  // .pipe(gp_less({ paths: [
-  //   'src/bower_components/bootstrap/less/bootstrap.less'
-  // ]}))
+  .pipe(gp_less({ paths: [
+    // 'src/bower_components/bootstrap/less/bootstrap.less'
+  ]}))
   .pipe(gp_rename('app.css'))
   .pipe(gp_clean_css({keepSpecialComments: 0}))
   .pipe(gulp.dest(build.path('assets')))
