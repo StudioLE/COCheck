@@ -1,15 +1,10 @@
 {
-  "globalstrict": true,
+  "strict": "global",
+  "asi": true,
+  "browser": true,
+  "devel": true,
+  "jquery": true,
   "globals": {
-    "angular": false,
-    "describe": false,
-    "it": false,
-    "expect": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "module": false,
-    "inject": false,
-    "require": false
-  },
-  "asi": true
+    "UIkit": false
+  }
 }
