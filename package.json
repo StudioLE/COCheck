@@ -6,7 +6,8 @@
   "license": false,
   "scripts": {
     "prestart": "npm install",
-    "start": "http-server . -a localhost -p 1337 -c-1"
+    "start": "http-server . -a localhost -p 1337 -c-1",
+    "test": "testcafe chrome ./tests --skip-uncaught-errors"
   },
   "dependencies": {
     "gulp": "^3.9.0",
@@ -21,5 +22,8 @@
     "jquery": "^3.3.1",
     "less": "^3.8.1",
     "uikit": "^3.0.0-rc.9-dev.bd39d353"
+  },
+  "devDependencies": {
+    "testcafe": "^0.22.0"
   }
 }
