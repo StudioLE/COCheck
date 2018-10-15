@@ -7,9 +7,22 @@ $(document).ready(function() {
 
   var brick = 215
   var joint = 10
+  var dp = 3
 
   // // // // // // // // // // // // // // // // // // // // // //
   // Functions
+
+  /**
+   * Never exceed x decimal places
+   */
+  function limitDP(x) {
+    // If the number contains a decimal place
+    // and has more than dp number of decimal places
+    if(x.toString().split('.').length > 1 && x.toString().split('.')[1].length > dp) {
+      x = x.toFixed(dp)
+    }
+    return x
+  }
 
   /**
    * Return the CO dimension for x bricks
@@ -56,10 +69,10 @@ $(document).ready(function() {
    * Return an integer modifier to convert a CO dimension to the current mode
    */
   $.fn.COModeMod = function() {
-    // Check the CO mode and add or subtract a joint if required
+    // Check the CO mode and add joint if CO+ or substract joint if CO-
     var mod = 0
     if(this.COMode() == "COPlus") {
-      mod = 1 * joint
+      mod = joint
     }
     else if(this.COMode() == "COMinus") {
       mod = -1 * joint
@@ -75,11 +88,12 @@ $(document).ready(function() {
     var dim = Number(this.val())
     console.log("Updating bricks to correspond to dim:", dim)
 
-    // Adjust the value to a CO and see how many bricks it is
-    var bricks = (dim + this.COModeMod()) / CO(1)
+    // Convert the dim to a CO by subtracting the modifier then divide by CO
+    var bricks = (dim + (this.COModeMod() * -1)) / CO(1)
 
     // Update the related bricks field
-    this.parents(".current").find(".bricks").val(bricks)
+    // @todo Truncate the number to 2 decimal places
+    this.parents(".current").find(".bricks").val(limitDP(bricks))
 
     // Update fields for next and previous
     this.COUpdateSuggestions(bricks)
@@ -93,7 +107,7 @@ $(document).ready(function() {
     var bricks = Number(this.val())
     console.log("Updating dim to correspond to bricks:", bricks)
 
-    // Adjust the value
+    // Calculate the CO then add a modifier if required
     var dim = CO(bricks) + this.COModeMod()
 
     // Update the dim field
@@ -136,12 +150,14 @@ $(document).ready(function() {
     // console.log("Current:", current, "Nearest:", nearest, "Previous:", previous, "Next:", next)
 
     // Check the CO mode return the modifier
-    var mod = this.COModeMod() * -1
+    var mod = this.COModeMod()
 
     // Update the previous and next fields
     var card = this.parents(".uk-card")
     card.find(".previous .bricks").val(previous)
     card.find(".next .bricks").val(next)
+
+    // Calculate the CO then convert to CO- or CO+ with a modifier as appropriate
     card.find(".previous .dim").val(CO(previous) + mod)
     card.find(".next .dim").val(CO(next) + mod)
   }
@@ -158,6 +174,7 @@ $(document).ready(function() {
       // Update the dim value for the new card
       // Then fire the change event to ensure the related fields are updated
       card.find(".current .dim").val(dim).trigger("change")
+      // @todo Set the CO Mode to the most sensible 
     }
   }
 
@@ -169,7 +186,7 @@ $(document).ready(function() {
     var hash = window.location.hash.split("/").slice(1)
 
     // If there is a hash then cycle through each parameter and add or update the cards accordingly
-    if(hash.length > 1) {
+    if(hash.length >= 1) {
       var i = 0
       hash.forEach(function(param) {
         var dim = Number(param)
@@ -206,6 +223,7 @@ $(document).ready(function() {
   $("input.bricks").change(function(event) {
     console.log("EVENT -- Bricks input has changed")
     $(this).COUpdateDim()
+    // @todo Update the URL when the dim is changed
   })
 
   // When the tab changes
@@ -239,6 +257,8 @@ $(document).ready(function() {
     event.preventDefault()
     duplicate(900)
   })
+
+  // @todo Remember state of images toggle on change event
 
   // // // // // // // // // // // // // // // // // // // // // //
   // Init
