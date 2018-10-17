@@ -18,13 +18,13 @@ const nextBricks = Selector('.card.prototype .next .bricks')
 // // // // // // // // // // // // // // // // // // // // // //
 // Tests
 
-test('CO', async t => {
+test('CO-', async t => {
   await t
     .expect(currentDim.value).eql('1125', 'Current dim')
-    .expect(previousDim.value).eql('1012.5', 'Previous dim')
-    .expect(nextDim.value).eql('1237.5', 'Next dim')
-    .expect(currentBricks.value).eql('5', 'Current bricks')
-    .expect(previousBricks.value).eql('4.5', 'Previous bricks')
+    .expect(previousDim.value).eql('1115', 'Previous dim')
+    .expect(nextDim.value).eql('1227.5', 'Next dim')
+    .expect(currentBricks.value).eql('5.044', 'Current bricks')
+    .expect(previousBricks.value).eql('5', 'Previous bricks')
     .expect(nextBricks.value).eql('5.5', 'Next bricks')
 })
 
@@ -39,13 +39,13 @@ test('CO+', async t => {
     .expect(nextBricks.value).eql('5', 'Next bricks')
 })
 
-test('CO-', async t => {
+test('CO', async t => {
   await t
-    .click(Selector('.card.prototype .COMinus'))
+    .click(Selector('.card.prototype .CO'))
     .expect(currentDim.value).eql('1125', 'Current dim')
-    .expect(previousDim.value).eql('1115', 'Previous dim')
-    .expect(nextDim.value).eql('1227.5', 'Next dim')
-    .expect(currentBricks.value).eql('5.044', 'Current bricks')
-    .expect(previousBricks.value).eql('5', 'Previous bricks')
+    .expect(previousDim.value).eql('1012.5', 'Previous dim')
+    .expect(nextDim.value).eql('1237.5', 'Next dim')
+    .expect(currentBricks.value).eql('5', 'Current bricks')
+    .expect(previousBricks.value).eql('4.5', 'Previous bricks')
     .expect(nextBricks.value).eql('5.5', 'Next bricks')
 })

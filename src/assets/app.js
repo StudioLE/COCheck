@@ -68,13 +68,16 @@ $(document).ready(function() {
   /**
    * Return an integer modifier to convert a CO dimension to the current mode
    */
-  $.fn.COModeMod = function() {
+  $.fn.COMod = function(mode) {
+    if(mode == undefined) {
+      mode = this.COMode()
+    }
     // Check the CO mode and add joint if CO+ or substract joint if CO-
     var mod = 0
-    if(this.COMode() == "COPlus") {
+    if(mode == "COPlus") {
       mod = joint
     }
-    else if(this.COMode() == "COMinus") {
+    else if(mode == "COMinus") {
       mod = -1 * joint
     }
     return mod
@@ -84,44 +87,43 @@ $(document).ready(function() {
    * Given a dim input element, update the bricks field to correspond
    * Only configured to work for .current
    */
-  $.fn.COUpdateBricks = function() {
+  $.fn.COUpdateBricks = function(mode) {
     var dim = Number(this.val())
     console.log("Updating bricks to correspond to dim:", dim)
 
     // Convert the dim to a CO by subtracting the modifier then divide by CO
-    var bricks = (dim + (this.COModeMod() * -1)) / CO(1)
+    var bricks = (dim + (this.COMod(mode) * -1)) / CO(1)
 
     // Update the related bricks field
-    // @todo Truncate the number to 2 decimal places
     this.parents(".current").find(".bricks").val(limitDP(bricks))
 
     // Update fields for next and previous
-    this.COUpdateSuggestions(bricks)
+    this.COUpdateSuggestions(bricks, mode)
   }
 
   /**
    * Given a bricks input element, update the dim field to correspond
    * Only configured to work for .current
    */
-  $.fn.COUpdateDim = function() {
+  $.fn.COUpdateDim = function(mode) {
     var bricks = Number(this.val())
     console.log("Updating dim to correspond to bricks:", bricks)
 
     // Calculate the CO then add a modifier if required
-    var dim = CO(bricks) + this.COModeMod()
+    var dim = CO(bricks) + this.COMod(mode)
 
     // Update the dim field
     this.parents(".current").find(".dim").val(dim)
 
     // Update fields for next and previous
-    this.COUpdateSuggestions(bricks)
+    this.COUpdateSuggestions(bricks, mode)
   }
 
   /**
    * Given an element, update the next and previous suggestion fields to correspond
    * Only configured to work for .current
    */
-  $.fn.COUpdateSuggestions = function(current) {
+  $.fn.COUpdateSuggestions = function(current, mode) {
     console.log("Updating suggestions for bricks:", current)
 
     // Round the current bricks value to the nearest 0.5
@@ -150,7 +152,7 @@ $(document).ready(function() {
     // console.log("Current:", current, "Nearest:", nearest, "Previous:", previous, "Next:", next)
 
     // Check the CO mode return the modifier
-    var mod = this.COModeMod()
+    var mod = this.COMod(mode)
 
     // Update the previous and next fields
     var card = this.parents(".uk-card")
@@ -227,10 +229,10 @@ $(document).ready(function() {
   })
 
   // When the tab changes
-  // @todo Switcher event doesn't fire on duplicated cards
-  UIkit.util.on('.uk-switcher', 'shown', function () {
+  $(".COMode li").click(function(event) {
     console.log("EVENT -- Active CO mode has changed")
-    $(this).parents(".uk-card").find(".current .dim").COUpdateBricks()
+    var mode = $(this).attr('class').split(' ')[0]
+    $(this).parents(".uk-card").find(".current .dim").COUpdateBricks(mode)
   })
 
   // When the previous icon is clicked

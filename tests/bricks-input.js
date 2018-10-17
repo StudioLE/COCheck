@@ -18,13 +18,13 @@ const nextBricks = Selector('.card .next .bricks').nth(0)
 // // // // // // // // // // // // // // // // // // // // // //
 // Tests
 
-test('CO', async t => {
+test('CO-', async t => {
   await t
     .typeText(currentBricks, '5', { replace: true })
     .pressKey('enter')
-    .expect(currentDim.value).eql('1125', 'Current dim')
-    .expect(previousDim.value).eql('1012.5', 'Previous dim')
-    .expect(nextDim.value).eql('1237.5', 'Next dim')
+    .expect(currentDim.value).eql('1115', 'Current dim')
+    .expect(previousDim.value).eql('1002.5', 'Previous dim')
+    .expect(nextDim.value).eql('1227.5', 'Next dim')
     .expect(currentBricks.value).eql('5', 'Current bricks')
     .expect(previousBricks.value).eql('4.5', 'Previous bricks')
     .expect(nextBricks.value).eql('5.5', 'Next bricks')
@@ -43,14 +43,14 @@ test('CO+', async t => {
     .expect(nextBricks.value).eql('3.5', 'Next bricks')
 })
 
-test('CO-', async t => {
+test('CO', async t => {
   await t
-    .click(Selector('.card').nth(0).find('.COMinus'))
+    .click(Selector('.card').nth(0).find('.CO'))
     .typeText(currentBricks, '5', { replace: true })
     .pressKey('enter')
-    .expect(currentDim.value).eql('1115', 'Current dim')
-    .expect(previousDim.value).eql('1002.5', 'Previous dim')
-    .expect(nextDim.value).eql('1227.5', 'Next dim')
+    .expect(currentDim.value).eql('1125', 'Current dim')
+    .expect(previousDim.value).eql('1012.5', 'Previous dim')
+    .expect(nextDim.value).eql('1237.5', 'Next dim')
     .expect(currentBricks.value).eql('5', 'Current bricks')
     .expect(previousBricks.value).eql('4.5', 'Previous bricks')
     .expect(nextBricks.value).eql('5.5', 'Next bricks')
