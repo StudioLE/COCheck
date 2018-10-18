@@ -5,6 +5,7 @@
   "devel": true,
   "jquery": true,
   "globals": {
-    "UIkit": false
+    "UIkit": false,
+    "SVG": false
   }
 }

@@ -21,6 +21,7 @@
     "gulp-uglify": "^3.0.1",
     "jquery": "^3.3.1",
     "less": "^3.8.1",
+    "svg.js": "^2.6.6",
     "uikit": "^3.0.0-rc.9-dev.bd39d353"
   },
   "devDependencies": {

@@ -9,23 +9,6 @@ html, body {
   border-color: transparent;
 }
 
-.previous {
-
-}
-
-// .next {
-//   border-right: rgb(200,200,200) 4px solid;
-// }
-
-// .previous-icon svg {
-//   transform: rotate(90deg);
-// }
-
-// .next-icon svg {
-//   transform: rotate(-90deg);
-// }
-
-
 // .uk-tab>*>a {
 //   font-size: 1.25rem;
 // }
@@ -50,3 +33,34 @@ html, body {
     border-color: #1e87f0;
   }
 }
+
+svg .default {
+  fill: #c8c8c8;
+}
+
+svg .dashed {
+  fill: #eeeeee;
+  // stroke-dasharray: 20.5 41;
+  // stroke-width: 3;
+  // stroke: #c8c8c8;
+}
+
+svg line {
+  stroke: #c8c8c8;
+  stroke-width: 4;
+}
+
+svg .diagonal {
+  stroke: #c8c8c8;
+  stroke-width: 20;
+}
+
+svg tspan {
+  fill: #c8c8c8;
+  font-size: 80px;
+  text-anchor: middle;
+}
+
+// @todo Add a pulsing effect to either next or previous, whichever is closest
+// @todo .dim-border should be red when dim isn't valid
+// @todo Optimise for mobiles and smaller screens

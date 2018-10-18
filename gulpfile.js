@@ -114,7 +114,8 @@ gulp.task('vendor-js', function() {
   gulp.src([
     'node_modules/uikit/dist/js/uikit.min.js',
     'node_modules/uikit/dist/js/uikit-icons.min.js',
-    'node_modules/jquery/dist/jquery.min.js'
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/svg.js/dist/svg.min.js'
 
   ])
   .pipe(gp_concat('concat.js'))
