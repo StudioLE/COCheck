@@ -83,6 +83,14 @@ $(document).ready(function() {
     return mod
   }
 
+
+  /**
+   * Given an element, return the index of its parent card
+   */
+  $.fn.cardIndex = function() {
+    return $('.card').index($(this).parents('.card'))
+  }
+
   /**
    * Given a dim input element, update the bricks field to correspond
    * Only configured to work for .current
@@ -172,6 +180,10 @@ $(document).ready(function() {
     var card = $(".prototype").clone(true, true).insertBefore(".duplicate")
     card.removeClass("prototype")
 
+    // Clear the diagram and init a new one
+    var d = card.find(".diagram").empty()
+    diagrams.push(new Diagram(d))
+
     if(dim !== undefined) {
       // Update the dim value for the new card
       // Then fire the change event to ensure the related fields are updated
@@ -215,109 +227,118 @@ $(document).ready(function() {
   // // // // // // // // // // // // // // // // // // // // // //
   // Diagram
   
-  var diagram = {
-    x: 0,
-    y: 0,
-    draw: null,
+  var diagrams = []
 
-    init: function(element) {
-      var card = element.parents('.card')
-      var i = $('.card').index(card)
-      console.log(i)
-      var id = 'diagram-' + i
-      console.log(id)
-      element.attr('id', id)
-      this.draw = SVG(id)
-      this.draw.viewbox(CO(2), CO(-0.5), COMinus(16), 1000)
-      this.draw.attr('preserveAspectRatio', 'xMidYMid meet')
-      this.doubleLeaf(4)
-      this.doubleLeaf(4, 'dashed')
-      this.doubleLeaf(4)
-      this.doubleLeaf(4, 'dashed')
-      this.doubleLeaf(4)
-      this.turn(4)
-      this.doubleLeaf(10)
+  function Diagram(element) {
+    this.x = 0
+    this.y = 0
+    this.draw = null
 
-      this.dim()
-    },
+    // Given the div a unique id
+    var id = 'diagram-' + element.cardIndex()
+    element.attr('id', id)
 
-    doubleLeaf: function(n, style) {
-      if(style == undefined) {
-        style = 'default'
-      }
-      for(var i = 0; i < n; i++) {
-        this.draw.rect(COMinus(1), COMinus(0.5))
-          .addClass(style)
-          .move(this.x + CO(i), this.y)
+    // Init SVG.js
+    this.draw = SVG(id)
+    this.viewbox(element.COMode(), false)
+    this.draw.attr('preserveAspectRatio', 'xMidYMid meet')
 
-        this.draw.rect(COMinus(1), COMinus(0.5))
-          .addClass(style)
-          .move(this.x + CO(i), this.y + CO(0.5))
-      }
+    // Draw sequences of bricks
+    this.doubleLeaf(4)
+    this.doubleLeaf(4, 'dashed')
+    this.doubleLeaf(4)
+    this.doubleLeaf(4, 'dashed')
+    this.doubleLeaf(4)
+    this.turn(4)
+    this.doubleLeaf(10)
 
-      this.x = this.x + CO(n)
-      this.y = this.y + 0
+    // Draw the dimensions
+    this.dim()
 
-    },
+    return this
+  }
 
-    turn: function() {
+  Diagram.prototype.doubleLeaf = function(n, style) {
+    if(style == undefined) {
+      style = 'default'
+    }
+    for(var i = 0; i < n; i++) {
       this.draw.rect(COMinus(1), COMinus(0.5))
-        .addClass('default')
-        .move(this.x + CO(0), this.y)
-      this.draw.rect(COMinus(0.5), COMinus(1))
-        .addClass('default')
-        .move(this.x, this.y + CO(0.5))
-      this.draw.rect(COMinus(0.5), COMinus(1))
-        .addClass('default')
-        .move(this.x + CO(0.5), this.y + CO(0.5))
+        .addClass(style)
+        .move(this.x + CO(i), this.y)
+
       this.draw.rect(COMinus(1), COMinus(0.5))
-        .addClass('default')
-        .move(this.x + CO(0), this.y + CO(1.5))
-
-      this.x = this.x + CO(1)
-      this.y = this.y + CO(1)
-
-    },
-
-    dim: function() {
-      this.dimVertical(CO(8))
-      this.dimHorizontal(CO(8), COMinus(4), 'CO-')
-      this.dimVertical(COMinus(12))
-      this.dimHorizontal(COMinus(12), COPlus(4), 'CO+')
-      this.dimVertical(CO(16))
-      this.dimHorizontal(CO(16), CO(4), 'CO')
-      this.dimVertical(CO(20))
-    },
-
-    dimHorizontal: function(x, width, label) {
-      this.draw.line(width, 0, 0, 0)
-        .move(x, CO(2.5))
-      this.draw.text(label)
-        .move(x + COMinus(2), CO(2.75))
-    },
-
-    dimVertical: function(x) {
-      this.draw.line(0, COMinus(2), 0, 0)
-        .move(x, COPlus(1))
-      this.draw.line(COMinus(0.5), COMinus(0.5), 0, 0)
-        .addClass('diagonal')
-        .move(x - CO(0.25), CO(2.25))
-    },
-
-    viewbox: function(mode) {
-      var start, width
-      if(mode == 'COMinus') {
-        start = 2
-      }
-      else if(mode == 'COPlus') {
-        start = 6
-      }
-      else {
-        start = 10
-      }
-      this.draw.animate().viewbox(CO(start), CO(-0.5), COMinus(16), 1000)
+        .addClass(style)
+        .move(this.x + CO(i), this.y + CO(0.5))
     }
 
+    this.x = this.x + CO(n)
+    this.y = this.y + 0
+
+  }
+
+  Diagram.prototype.turn = function() {
+    this.draw.rect(COMinus(1), COMinus(0.5))
+      .addClass('default')
+      .move(this.x + CO(0), this.y)
+    this.draw.rect(COMinus(0.5), COMinus(1))
+      .addClass('default')
+      .move(this.x, this.y + CO(0.5))
+    this.draw.rect(COMinus(0.5), COMinus(1))
+      .addClass('default')
+      .move(this.x + CO(0.5), this.y + CO(0.5))
+    this.draw.rect(COMinus(1), COMinus(0.5))
+      .addClass('default')
+      .move(this.x + CO(0), this.y + CO(1.5))
+
+    this.x = this.x + CO(1)
+    this.y = this.y + CO(1)
+
+  }
+
+  Diagram.prototype.dim = function() {
+    this.dimVertical(CO(8))
+    this.dimHorizontal(CO(8), COMinus(4), 'CO-')
+    this.dimVertical(COMinus(12))
+    this.dimHorizontal(COMinus(12), COPlus(4), 'CO+')
+    this.dimVertical(CO(16))
+    this.dimHorizontal(CO(16), CO(4), 'CO')
+    this.dimVertical(CO(20))
+  }
+
+  Diagram.prototype.dimHorizontal = function(x, width, label) {
+    this.draw.line(width, 0, 0, 0)
+      .move(x, CO(2.5))
+    this.draw.text(label)
+      .move(x + COMinus(2), CO(2.75))
+  }
+
+  Diagram.prototype.dimVertical = function(x) {
+    this.draw.line(0, COMinus(2), 0, 0)
+      .move(x, COPlus(1))
+    this.draw.line(COMinus(0.5), COMinus(0.5), 0, 0)
+      .addClass('diagonal')
+      .move(x - CO(0.25), CO(2.25))
+  }
+
+  Diagram.prototype.viewbox = function(mode, animate) {
+    var start, width
+    if(mode == 'COMinus') {
+      start = 2
+    }
+    else if(mode == 'COPlus') {
+      start = 6
+    }
+    else {
+      start = 10
+    }
+
+    if(animate === false) {
+      this.draw.viewbox(CO(start), CO(-0.5), COMinus(16), 1000)
+    }
+    else {
+      this.draw.animate().viewbox(CO(start), CO(-0.5), COMinus(16), 1000)
+    }
   }
 
   // // // // // // // // // // // // // // // // // // // // // //
@@ -359,7 +380,7 @@ $(document).ready(function() {
     console.log("EVENT -- Active CO mode has changed")
     var mode = $(this).attr('class').split(' ')[0]
     $(this).parents(".uk-card").find(".current .dim").COUpdateBricks(mode)
-    diagram.viewbox(mode)
+    diagrams[$(this).cardIndex()].viewbox(mode)
   })
 
   // When the previous icon is clicked
@@ -393,6 +414,6 @@ $(document).ready(function() {
   // Init
 
   init()
-  diagram.init($('.card .diagram'))
+  diagrams.unshift( new Diagram($('.card .diagram')))
 
 })
