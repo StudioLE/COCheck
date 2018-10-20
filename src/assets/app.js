@@ -326,14 +326,32 @@ $(document).ready(function() {
   // When a dim input value is changed
   $("input.dim").keyup(function(event) {
     console.log("EVENT -- Dim input has changed")
-    $(this).COUpdateBricks()
+
+    if(event.key == 'ArrowUp') {
+      $(this).parents(".uk-card").find('.next-icon').trigger("click")
+    }
+    else if(event.key == 'ArrowDown') {
+      $(this).parents(".uk-card").find('.previous-icon').trigger("click")
+    }
+    else {
+      $(this).COUpdateBricks()
+    }
   })
 
   // When a bricks input value is changed
   $("input.bricks").keyup(function(event) {
     console.log("EVENT -- Bricks input has changed")
-    $(this).COUpdateDim()
-    // @todo Update the URL when the dim is changed
+
+    if(event.key == 'ArrowUp') {
+      $(this).parents(".uk-card").find('.next-icon').trigger("click")
+    }
+    else if(event.key == 'ArrowDown') {
+      $(this).parents(".uk-card").find('.previous-icon').trigger("click")
+    }
+    else {
+      $(this).COUpdateDim()
+      // @todo Update the URL when the dim is changed
+    }
   })
 
   // When the tab changes
