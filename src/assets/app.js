@@ -49,16 +49,16 @@ $(document).ready(function() {
    * Given an element, determine the active CO mode
    */
   $.fn.COMode = function() {
-    var active = this.parents(".uk-card").find(".uk-active")
+    var active = this.card('.uk-active')
 
-    if(active.hasClass("CO")) {
-      return "CO"
+    if(active.hasClass('CO')) {
+      return 'CO'
     }
-    else if(active.hasClass("COPlus")) {
-      return "COPlus"
+    else if(active.hasClass('COPlus')) {
+      return 'COPlus'
     }
-    else if(active.hasClass("COMinus")) {
-      return "COMinus"
+    else if(active.hasClass('COMinus')) {
+      return 'COMinus'
     }
     else {
       return false
@@ -74,10 +74,10 @@ $(document).ready(function() {
     }
     // Check the CO mode and add joint if CO+ or substract joint if CO-
     var mod = 0
-    if(mode == "COPlus") {
+    if(mode == 'COPlus') {
       mod = joint
     }
-    else if(mode == "COMinus") {
+    else if(mode == 'COMinus') {
       mod = -1 * joint
     }
     return mod
@@ -91,19 +91,27 @@ $(document).ready(function() {
     return $('.card').index($(this).parents('.card'))
   }
 
+
+  /**
+   * Given an element, return the index of its parent card
+   */
+  $.fn.card = function(string) {
+    return $(this).parents('.card').find(string)
+  }
+
   /**
    * Given a dim input element, update the bricks field to correspond
    * Only configured to work for .current
    */
   $.fn.COUpdateBricks = function(mode) {
     var dim = Number(this.val())
-    console.log("Updating bricks to correspond to dim:", dim)
+    console.log('Updating bricks to correspond to dim:', dim)
 
     // Convert the dim to a CO by subtracting the modifier then divide by CO
     var bricks = (dim + (this.COMod(mode) * -1)) / CO(1)
 
     // Update the related bricks field
-    this.parents(".current").find(".bricks").val(limitDP(bricks))
+    this.parents('.current').find('.bricks').val(limitDP(bricks))
 
     // Update fields for next and previous
     this.COUpdateSuggestions(bricks, mode)
@@ -115,13 +123,13 @@ $(document).ready(function() {
    */
   $.fn.COUpdateDim = function(mode) {
     var bricks = Number(this.val())
-    console.log("Updating dim to correspond to bricks:", bricks)
+    console.log('Updating dim to correspond to bricks:', bricks)
 
     // Calculate the CO then add a modifier if required
     var dim = CO(bricks) + this.COMod(mode)
 
     // Update the dim field
-    this.parents(".current").find(".dim").val(dim)
+    this.parents('.current').find('.dim').val(dim)
 
     // Update fields for next and previous
     this.COUpdateSuggestions(bricks, mode)
@@ -132,7 +140,7 @@ $(document).ready(function() {
    * Only configured to work for .current
    */
   $.fn.COUpdateSuggestions = function(current, mode) {
-    console.log("Updating suggestions for bricks:", current)
+    console.log('Updating suggestions for bricks:', current)
 
     // Round the current bricks value to the nearest 0.5
     // Do this by doubling it, rounding and then halving
@@ -142,52 +150,51 @@ $(document).ready(function() {
     var previous, next
 
     if(nearest < current) {
-      console.log("Nearest is less than current")
+      console.log('Nearest is less than current')
       previous = nearest
       next = nearest + 0.5
     }
     else if(nearest > current) {
-      console.log("Nearest is greater than current")
+      console.log('Nearest is greater than current')
       previous = nearest - 0.5
       next = nearest
     }
     else {
-      console.log("Nearest is equal to current")
+      console.log('Nearest is equal to current')
       previous = nearest - 0.5
       next = nearest + 0.5
     }
 
-    // console.log("Current:", current, "Nearest:", nearest, "Previous:", previous, "Next:", next)
+    // console.log('Current:', current, 'Nearest:', nearest, 'Previous:', previous, 'Next:', next)
 
     // Check the CO mode return the modifier
     var mod = this.COMod(mode)
 
     // Update the previous and next fields
-    var card = this.parents(".uk-card")
-    card.find(".previous .bricks").val(previous)
-    card.find(".next .bricks").val(next)
+    this.card('.previous .bricks').val(previous)
+    this.card('.next .bricks').val(next)
 
     // Calculate the CO then convert to CO- or CO+ with a modifier as appropriate
-    card.find(".previous .dim").val(CO(previous) + mod)
-    card.find(".next .dim").val(CO(next) + mod)
+    this.card('.previous .dim').val(CO(previous) + mod)
+    this.card('.next .dim').val(CO(next) + mod)
   }
 
   /**
    * Add a copy of the first card and place it at the end
    */
   function duplicate(dim) {
-    console.log("Adding new card with dim:", dim)
-    var card = $(".prototype").clone(true, true).insertBefore(".duplicate")
-    card.removeClass("prototype")
+    console.log('Adding new card with dim:', dim)
+    var card = $('.prototype').clone(true, true).insertBefore('.duplicate')
+    card.removeClass('prototype')
 
     // Clear the diagram and init a new one
-    var d = card.find(".diagram").empty()
+    var d = card.find('.diagram').empty()
     diagrams.push(new Diagram(d))
 
     if(dim !== undefined) {
       // Update the dim value for the new card
       // Then fire the change event to ensure the related fields are updated
-      card.find(".current .dim").val(dim).trigger("keyup")
+      card.find('.current .dim').val(dim).trigger('keyup')
       // @todo Set the CO Mode to the most sensible 
     }
   }
@@ -197,7 +204,7 @@ $(document).ready(function() {
    */
   function init() {
     // Get hash params from URL
-    var hash = window.location.hash.split("/").slice(1)
+    var hash = window.location.hash.split('/').slice(1)
 
     // If there is a hash then cycle through each parameter and add or update the cards accordingly
     if(hash.length >= 1) {
@@ -209,7 +216,7 @@ $(document).ready(function() {
           if(i <= 1) {
             // Update the dim value for the first card
             // Then fire the change event to ensure the related fields are updated
-            $(".card.prototype .current .dim").val(hash[0]).trigger("keyup")
+            $('.card.prototype .current .dim').val(hash[0]).trigger('keyup')
           }
           else {
             // Add a new card using dim as the value
@@ -217,7 +224,7 @@ $(document).ready(function() {
           }
         }
         else {
-          console.log("Param isn't an integer:", param)
+          console.log('Param isn\'t an integer:', param)
         }
       })
     }
@@ -241,7 +248,7 @@ $(document).ready(function() {
     // Init SVG.js
     this.draw = SVG(id)
     this.viewbox(element.COMode(), false)
-    this.draw.attr('preserveAspectRatio', 'xMidYMid meet')
+    this.draw.attr('preserveaspectratio', 'xMidYMid meet')
 
     // Draw sequences of bricks
     this.doubleLeaf(4)
@@ -322,7 +329,7 @@ $(document).ready(function() {
   }
 
   Diagram.prototype.viewbox = function(mode, animate) {
-    var start, width
+    var start
     if(mode == 'COMinus') {
       start = 2
     }
@@ -345,14 +352,14 @@ $(document).ready(function() {
   // Events
 
   // When a dim input value is changed
-  $("input.dim").keyup(function(event) {
-    console.log("EVENT -- Dim input has changed")
+  $('input.dim').keyup(function(event) {
+    console.log('EVENT -- Dim input has changed')
 
     if(event.key == 'ArrowUp') {
-      $(this).parents(".uk-card").find('.next-icon').trigger("click")
+      $(this).card('.next-icon').trigger('click')
     }
     else if(event.key == 'ArrowDown') {
-      $(this).parents(".uk-card").find('.previous-icon').trigger("click")
+      $(this).card('.previous-icon').trigger('click')
     }
     else {
       $(this).COUpdateBricks()
@@ -360,14 +367,14 @@ $(document).ready(function() {
   })
 
   // When a bricks input value is changed
-  $("input.bricks").keyup(function(event) {
-    console.log("EVENT -- Bricks input has changed")
+  $('input.bricks').keyup(function(event) {
+    console.log('EVENT -- Bricks input has changed')
 
     if(event.key == 'ArrowUp') {
-      $(this).parents(".uk-card").find('.next-icon').trigger("click")
+      $(this).card('.next-icon').trigger('click')
     }
     else if(event.key == 'ArrowDown') {
-      $(this).parents(".uk-card").find('.previous-icon').trigger("click")
+      $(this).card('.previous-icon').trigger('click')
     }
     else {
       $(this).COUpdateDim()
@@ -376,39 +383,39 @@ $(document).ready(function() {
   })
 
   // When the tab changes
-  $(".COMode li").click(function(event) {
-    console.log("EVENT -- Active CO mode has changed")
+  $('.COMode li').click(function() {
+    console.log('EVENT -- Active CO mode has changed')
     var mode = $(this).attr('class').split(' ')[0]
-    $(this).parents(".uk-card").find(".current .dim").COUpdateBricks(mode)
+    $(this).card('.current .dim').COUpdateBricks(mode)
     diagrams[$(this).cardIndex()].viewbox(mode)
   })
 
   // When the previous icon is clicked
-  $(".previous-icon").click(function(event) {
-    console.log("EVENT -- Previous icon clicked")
+  $('.previous-icon').click(function(event) {
+    console.log('EVENT -- Previous icon clicked')
     event.preventDefault()
     var element = $(this)
-    var previous = element.parents(".uk-card").find(".previous .bricks").val()
-    element.parents(".uk-card").find(".current .bricks").val(previous).trigger("keyup")
+    var previous = element.card('.previous .bricks').val()
+    element.card('.current .bricks').val(previous).trigger('keyup')
   })
 
   // When the next icon is clicked
-  $(".next-icon").click(function(event) {
-    console.log("EVENT -- Next icon clicked")
+  $('.next-icon').click(function(event) {
+    console.log('EVENT -- Next icon clicked')
     event.preventDefault()
     var element = $(this)
-    var next = element.parents(".uk-card").find(".next .bricks").val()
-    element.parents(".uk-card").find(".current .bricks").val(next).trigger("keyup")
+    var next = element.card('.next .bricks').val()
+    element.card('.current .bricks').val(next).trigger('keyup')
   })
 
   // When duplicate icon is clicked
-  $(".duplicate-icon").click(function(event) {
-    console.log("EVENT -- Duplicate icon clicked")
+  $('.duplicate-icon').click(function(event) {
+    console.log('EVENT -- Duplicate icon clicked')
     event.preventDefault()
     duplicate(890)
   })
 
-  // @todo Remember state of images toggle on change event
+  // @todo remember state of images toggle on change event
 
   // // // // // // // // // // // // // // // // // // // // // //
   // Init
