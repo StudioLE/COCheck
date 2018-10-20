@@ -21,7 +21,6 @@ const nextBricks = Selector('.card .next .bricks').nth(0)
 test('CO-', async t => {
   await t
     .typeText(currentBricks, '5', { replace: true })
-    .pressKey('enter')
     .expect(currentDim.value).eql('1115', 'Current dim')
     .expect(previousDim.value).eql('1002.5', 'Previous dim')
     .expect(nextDim.value).eql('1227.5', 'Next dim')
@@ -34,7 +33,6 @@ test('CO+', async t => {
   await t
     .click(Selector('.card').nth(0).find('.COPlus'))
     .typeText(currentBricks, '3.2', { replace: true })
-    .pressKey('enter')
     .expect(currentDim.value).eql('730', 'Current dim')
     .expect(previousDim.value).eql('685', 'Previous dim')
     .expect(nextDim.value).eql('797.5', 'Next dim')
@@ -47,7 +45,6 @@ test('CO', async t => {
   await t
     .click(Selector('.card').nth(0).find('.CO'))
     .typeText(currentBricks, '5', { replace: true })
-    .pressKey('enter')
     .expect(currentDim.value).eql('1125', 'Current dim')
     .expect(previousDim.value).eql('1012.5', 'Previous dim')
     .expect(nextDim.value).eql('1237.5', 'Next dim')

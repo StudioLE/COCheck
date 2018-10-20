@@ -175,7 +175,7 @@ $(document).ready(function() {
     if(dim !== undefined) {
       // Update the dim value for the new card
       // Then fire the change event to ensure the related fields are updated
-      card.find(".current .dim").val(dim).trigger("change")
+      card.find(".current .dim").val(dim).trigger("keyup")
       // @todo Set the CO Mode to the most sensible 
     }
   }
@@ -197,7 +197,7 @@ $(document).ready(function() {
           if(i <= 1) {
             // Update the dim value for the first card
             // Then fire the change event to ensure the related fields are updated
-            $(".card.prototype .current .dim").val(hash[0]).trigger("change")
+            $(".card.prototype .current .dim").val(hash[0]).trigger("keyup")
           }
           else {
             // Add a new card using dim as the value
@@ -324,13 +324,13 @@ $(document).ready(function() {
   // Events
 
   // When a dim input value is changed
-  $("input.dim").change(function(event) {
+  $("input.dim").keyup(function(event) {
     console.log("EVENT -- Dim input has changed")
     $(this).COUpdateBricks()
   })
 
   // When a bricks input value is changed
-  $("input.bricks").change(function(event) {
+  $("input.bricks").keyup(function(event) {
     console.log("EVENT -- Bricks input has changed")
     $(this).COUpdateDim()
     // @todo Update the URL when the dim is changed
@@ -350,7 +350,7 @@ $(document).ready(function() {
     event.preventDefault()
     var element = $(this)
     var previous = element.parents(".uk-card").find(".previous .bricks").val()
-    element.parents(".uk-card").find(".current .bricks").val(previous).trigger("change")
+    element.parents(".uk-card").find(".current .bricks").val(previous).trigger("keyup")
   })
 
   // When the next icon is clicked
@@ -359,14 +359,14 @@ $(document).ready(function() {
     event.preventDefault()
     var element = $(this)
     var next = element.parents(".uk-card").find(".next .bricks").val()
-    element.parents(".uk-card").find(".current .bricks").val(next).trigger("change")
+    element.parents(".uk-card").find(".current .bricks").val(next).trigger("keyup")
   })
 
   // When duplicate icon is clicked
   $(".duplicate-icon").click(function(event) {
     console.log("EVENT -- Duplicate icon clicked")
     event.preventDefault()
-    duplicate(900)
+    duplicate(890)
   })
 
   // @todo Remember state of images toggle on change event
