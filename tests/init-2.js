@@ -3,7 +3,7 @@
 import { Selector } from 'testcafe'
 
 fixture `Init nth child`
-  .page `http://localhost:1337/src/#!/1125/720`
+  .page `http://localhost:1337/#!/1125/720`
 
 // // // // // // // // // // // // // // // // // // // // // //
 // Selectors

@@ -6,7 +6,9 @@
   "license": false,
   "scripts": {
     "prestart": "npm install",
-    "start": "http-server . -a localhost -p 1337 -c-1",
+    "start": "http-server ./src -a localhost -p 1337 -c-1",
+    "prebuild": "gulp clean && gulp build",
+    "build": "http-server ./build -a localhost -p 1337 -c-1",
     "test": "testcafe chrome ./tests --skip-uncaught-errors"
   },
   "dependencies": {

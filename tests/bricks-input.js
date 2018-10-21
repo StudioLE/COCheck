@@ -3,7 +3,7 @@
 import { Selector } from 'testcafe'
 
 fixture `Bricks input`
-  .page `http://localhost:1337/src/`
+  .page `http://localhost:1337/`
 
 // // // // // // // // // // // // // // // // // // // // // //
 // Selectors
