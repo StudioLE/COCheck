@@ -18,7 +18,7 @@ module.exports = {
     'array-bracket-newline': 'warn',
     'array-bracket-spacing': 'warn',
     'array-callback-return': 'warn',
-    'array-element-newline': 'warn',
+    'array-element-newline': 'off',
     'arrow-body-style': 'warn',
     'arrow-parens': 'warn',
     'arrow-spacing': 'warn',
@@ -238,7 +238,7 @@ module.exports = {
     'prefer-rest-params': 'warn',
     'prefer-spread': 'warn',
     'prefer-template': 'off',
-    'quote-props': 'warn',
+    'quote-props': ['warn', 'consistent-as-needed'],
     'quotes': [
       'warn',
       'single'

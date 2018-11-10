@@ -22,6 +22,12 @@ If you're looking for the accompanying Dynamo Script for Revit you'll find it in
 
 *Preload the calculator with values* - by adding parameters to the URL, for example: [https://dim.studiole.uk/#!/1125/720](https://dim.studiole.uk/#!/1125/720)
 
+*Specify the CO mode for preloaded values* - by prefixing the parameter with `-`, `+`, or `=` for `CO-`, `CO+`, and `CO` respectively.
+
+### Planned Features
+
+A roadmap of planned features is available on the projects [Wiki](https://github.com/StudioLE/CODimensionCalculator/wiki) but if there's something else you think the app would benefit from then feel free to [create an issue](https://github.com/StudioLE/CODimensionCalculator/issues/new).
+
 
 ## Contributing
 

@@ -85,6 +85,18 @@ $(document).ready(function() {
 
 
   /**
+   * Given a card, set the CO Mode
+   * @todo this function isn't presently used
+   */
+  $.fn.COModeSet = function(mode) {
+    // console.log($(this).find('.uk-active'))
+    // console.log(mode)
+    $(this).find('.uk-active').removeClass('uk-active')
+    $(this).find(mode).addClass('uk-active')
+  }
+
+
+  /**
    * Given an element, return the index of its parent card
    */
   $.fn.cardIndex = function() {
@@ -105,7 +117,7 @@ $(document).ready(function() {
    */
   $.fn.COUpdateBricks = function(mode) {
     var dim = Number(this.val())
-    console.log('Updating bricks to correspond to dim:', dim)
+    // console.log('Updating bricks to correspond to dim:', dim)
 
     // Convert the dim to a CO by subtracting the modifier then divide by CO
     var bricks = (dim + (this.COMod(mode) * -1)) / CO(1)
@@ -123,7 +135,7 @@ $(document).ready(function() {
    */
   $.fn.COUpdateDim = function(mode) {
     var bricks = Number(this.val())
-    console.log('Updating dim to correspond to bricks:', bricks)
+    // console.log('Updating dim to correspond to bricks:', bricks)
 
     // Calculate the CO then add a modifier if required
     var dim = CO(bricks) + this.COMod(mode)
@@ -140,7 +152,7 @@ $(document).ready(function() {
    * Only configured to work for .current
    */
   $.fn.COUpdateSuggestions = function(current, mode) {
-    console.log('Updating suggestions for bricks:', current)
+    // console.log('Updating suggestions for bricks:', current)
 
     // Round the current bricks value to the nearest 0.5
     // Do this by doubling it, rounding and then halving
@@ -150,17 +162,17 @@ $(document).ready(function() {
     var previous, next
 
     if(nearest < current) {
-      console.log('Nearest is less than current')
+      // console.log('Nearest is less than current')
       previous = nearest
       next = nearest + 0.5
     }
     else if(nearest > current) {
-      console.log('Nearest is greater than current')
+      // console.log('Nearest is greater than current')
       previous = nearest - 0.5
       next = nearest
     }
     else {
-      console.log('Nearest is equal to current')
+      // console.log('Nearest is equal to current')
       previous = nearest - 0.5
       next = nearest + 0.5
     }
@@ -182,14 +194,18 @@ $(document).ready(function() {
   /**
    * Add a copy of the first card and place it at the end
    */
-  function duplicate(dim) {
+  function duplicate(dim, mode) {
     console.log('Adding new card with dim:', dim)
     var card = $('.prototype').clone(true, true).insertBefore('.duplicate')
     card.removeClass('prototype')
 
+
+    card.find('.uk-active').removeClass('uk-active')
+    card.find('.' + mode).addClass('uk-active')
+
     // Clear the diagram and init a new one
     var d = card.find('.diagram').empty()
-    diagrams.push(new Diagram(d))
+    diagrams.push(new Diagram(d, mode))
 
     if(dim !== undefined) {
       // Update the dim value for the new card
@@ -208,23 +224,57 @@ $(document).ready(function() {
 
     // If there is a hash then cycle through each parameter and add or update the cards accordingly
     if(hash.length >= 1) {
-      var i = 0
+      var dims = []
       hash.forEach(function(param) {
         var dim = Number(param)
-        i++
-        if(Number.isInteger(dim)) {
-          if(i <= 1) {
-            // Update the dim value for the first card
-            // Then fire the change event to ensure the related fields are updated
-            $('.card.prototype .current .dim').val(hash[0]).trigger('keyup')
+        var prefix = param.slice(0, 1)
+
+        if(['-', '+', '=', 'b', 'j'].indexOf(prefix) >= 0) {
+          dim = Number(param.slice(1))
+        }
+
+        // @todo Is there a better method to determine if it's a number?
+        if($.isNumeric(dim)) {
+          var mode
+          if(prefix == '-') {
+            mode = 'COMinus'
+          }
+          else if(prefix == '+') {
+            mode = 'COPlus'
+          }
+          else if(prefix == '=') {
+            mode = 'CO'
           }
           else {
-            // Add a new card using dim as the value
-            duplicate(dim)
+            mode = 'COMinus'
           }
+          dims.push({
+            mode: mode,
+            val: dim
+          })
         }
         else {
           console.log('Param isn\'t an integer:', param)
+        }
+      })
+
+      // console.log(dims)
+      
+      var i = 0
+      dims.forEach(function(dim) {
+        i++
+        if(i <= 1) {
+          // console.log(dim)
+          $('.card.prototype .uk-active').removeClass('uk-active')
+          $('.card.prototype .' + dim.mode).addClass('uk-active')
+          // $('.card.prototype').COModeSet(dim.mode)
+          // Update the dim value for the first card
+          // Then fire the change event to ensure the related fields are updated
+          $('.card.prototype .current .dim').val(dim.val).trigger('keyup')
+        }
+        else {
+          // Add a new card using dim as the value
+          duplicate(dim.val, dim.mode)
         }
       })
     }
@@ -236,10 +286,14 @@ $(document).ready(function() {
   
   var diagrams = []
 
-  function Diagram(element) {
+  function Diagram(element, mode) {
     this.x = 0
     this.y = 0
     this.draw = null
+
+    if(mode == undefined) {
+      mode = element.COMode()
+    }
 
     // Given the div a unique id
     var id = 'diagram-' + element.cardIndex()
@@ -247,7 +301,7 @@ $(document).ready(function() {
 
     // Init SVG.js
     this.draw = SVG(id)
-    this.viewbox(element.COMode(), false)
+    this.viewbox(mode, false)
     this.draw.attr('preserveaspectratio', 'xMidYMid meet')
 
     // Draw sequences of bricks
