@@ -22,14 +22,13 @@ If you're looking for the accompanying Dynamo Script for Revit you'll find it in
 
 *Preload the calculator with values* - by adding parameters to the URL, for example: [https://dim.studiole.uk/#!/1125/720](https://dim.studiole.uk/#!/1125/720)
 
-*Specify the CO mode for preloaded values* - by prefixing the parameter with `-`, `+`, or `=` for `CO-`, `CO+`, and `CO` respectively.
+*Specify the CO mode for preloaded values* - by prefixing the parameter with `-`, `+`, or `=` for `CO-`, `CO+`, and `CO` respectively, for example: [http://localhost:1337/#!/=1125/+1135/-890](http://localhost:1337/#!/=1125/+1135/-890)
 
 ### Planned Features
 
 A roadmap of planned features is available on the projects [Wiki](https://github.com/StudioLE/CODimensionCalculator/wiki) but if there's something else you think the app would benefit from then feel free to [create an issue](https://github.com/StudioLE/CODimensionCalculator/issues/new).
 
-
-## Contributing
+### Contributing
 
 I'm always on the look out for collaborators so feel free to get in touch, suggest new features, or just fork the repository.
 
@@ -47,7 +46,7 @@ npm start
 
 Build and launch an http-server of the `build` directory at `http://localhost:1337`
 ```
-npm build
+npm run build
 ```
 
 Run end-to-end tests on `http://localhost:1337` with TestCafe
