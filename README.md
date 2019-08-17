@@ -2,27 +2,29 @@
 
 *A web app to quickly and easily convert to and between brick coordination dimensions.*
 
+![](screenshots/demo.gif)
+
 This repository contains the source code for the web app. The app itself can be found at:
 
 [https://dim.studiole.uk/](https://dim.studiole.uk/)
 
-If you're looking for the accompanying Dynamo Script for Revit you'll find it in the [Dynamo Scripts repository](https://github.com/StudioLE/DynamoScripts).
+If you're looking for the accompanying Dynamo Graph for Revit you'll find it in the [Dynamo Scripts repository](https://github.com/StudioLE/DynamoScripts).
 
 ### Using the App
 
-*Calculate the number of bricks* - by changing the dimension
+|**Calculate the number of bricks** - by changing the dimension
 
-*Calculate the dimension* - by changing the number of bricks
+**Calculate the dimension** - by changing the number of bricks
 
-*Change to the nearest valid dimensions* - by clicking the next or previous arrows.
+**Change to the nearest valid dimensions** - by clicking the next or previous arrows.
 
-*Change between `CO-`, `CO+`, and `CO`* - by clicking on the selector.
+**Change between `CO-`, `CO+`, and `CO`** - by clicking on the selector.
 
-*Add another calculator to the page* - by pressing the `+` button.
+**Add another calculator to the page** - by pressing the `+` button.
 
-*Preload the calculator with values* - by adding parameters to the URL, for example: [https://dim.studiole.uk/#!/1125/720](https://dim.studiole.uk/#!/1125/720)
+**Preload the calculator with values** - by adding parameters to the URL, for example: [https://dim.studiole.uk/#!/1125/720](https://dim.studiole.uk/#!/1125/720)
 
-*Specify the CO mode for preloaded values* - by prefixing the parameter with `-`, `+`, or `=` for `CO-`, `CO+`, and `CO` respectively, for example: [http://localhost:1337/#!/=1125/+1135/-890](http://localhost:1337/#!/=1125/+1135/-890)
+**Specify the CO mode for preloaded values** - by prefixing the parameter with `-`, `+`, or `=` for `CO-`, `CO+`, and `CO` respectively, for example: [https://dim.studiole.uk/#!/=1125/+1135/-890](https://dim.studiole.uk/#!/=1125/+1135/-890)
 
 ### Planned Features
 
