@@ -5,6 +5,7 @@
   "repository": "https://github.com/StudioLE/COCheck",
   "license": false,
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "prestart": "npm install",
     "start": "http-server ./src -a localhost -p 1337 -c-1",
     "prebuild": "gulp clean && gulp build",
@@ -28,5 +29,8 @@
   },
   "devDependencies": {
     "testcafe": "^0.22.0"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   }
 }
